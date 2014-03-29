@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using FSE_Subscription_App.Models;
+
+namespace FSE_Subscription_App.Models
+{
+	public class AppDbContext : DbContext
+	{
+		public DbSet<Provider> Providers { get; set; }
+		public DbSet<Content> Content { get; set; }
+		public DbSet<Subscription> Subscriptions { get; set; }
+	}
+}
