@@ -23,21 +23,21 @@ namespace FSE_Subscription_App
 			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
 						"~/Scripts/modernizr-*"));
 
-			bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+			bundles.Add(new StyleBundle("~/App_Content/css").Include("~/App_Content/site.css"));
 
-			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-						"~/Content/themes/base/jquery.ui.core.css",
-						"~/Content/themes/base/jquery.ui.resizable.css",
-						"~/Content/themes/base/jquery.ui.selectable.css",
-						"~/Content/themes/base/jquery.ui.accordion.css",
-						"~/Content/themes/base/jquery.ui.autocomplete.css",
-						"~/Content/themes/base/jquery.ui.button.css",
-						"~/Content/themes/base/jquery.ui.dialog.css",
-						"~/Content/themes/base/jquery.ui.slider.css",
-						"~/Content/themes/base/jquery.ui.tabs.css",
-						"~/Content/themes/base/jquery.ui.datepicker.css",
-						"~/Content/themes/base/jquery.ui.progressbar.css",
-						"~/Content/themes/base/jquery.ui.theme.css"));
+			bundles.Add(new StyleBundle("~/App_Content/themes/base/css").Include(
+						"~/App_Content/themes/base/jquery.ui.core.css",
+						"~/App_Content/themes/base/jquery.ui.resizable.css",
+						"~/App_Content/themes/base/jquery.ui.selectable.css",
+						"~/App_Content/themes/base/jquery.ui.accordion.css",
+						"~/App_Content/themes/base/jquery.ui.autocomplete.css",
+						"~/App_Content/themes/base/jquery.ui.button.css",
+						"~/App_Content/themes/base/jquery.ui.dialog.css",
+						"~/App_Content/themes/base/jquery.ui.slider.css",
+						"~/App_Content/themes/base/jquery.ui.tabs.css",
+						"~/App_Content/themes/base/jquery.ui.datepicker.css",
+						"~/App_Content/themes/base/jquery.ui.progressbar.css",
+						"~/App_Content/themes/base/jquery.ui.theme.css"));
 		}
 	}
 }

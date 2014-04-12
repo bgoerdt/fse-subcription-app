@@ -15,7 +15,9 @@ namespace FSE_Subscription_App.Models
 		public string Name { get; set; }
 		public string Type { get; set; }
 		public string Description { get; set; }
-		private string _path { get; set; }
+		[DisplayName("File")]
+		public string ServerPath { get; set; }
+		public string ContentType { get; set; }
 
 		[ForeignKey("Provider")]
 		public int ProviderID { get; set; }
