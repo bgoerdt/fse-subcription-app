@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
 
+
 namespace FSE_Subscription_App.Controllers
 {
     public class ContentController : Controller
@@ -59,6 +60,8 @@ namespace FSE_Subscription_App.Controllers
             }
 
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", content.ProviderID);
+
+        
             return View(content);
         }
 
