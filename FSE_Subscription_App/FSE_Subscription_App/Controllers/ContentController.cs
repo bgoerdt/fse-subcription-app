@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
-
+using System.IO;
 
 namespace FSE_Subscription_App.Controllers
 {
@@ -36,6 +36,16 @@ namespace FSE_Subscription_App.Controllers
             return View(content);
         }
 
+		public FilePathResult ViewContent(int id = 0)
+		{
+			Content content = db.Content.Find(id);
+			if (content == null)
+			{
+				return null;
+			}
+			return new FilePathResult(content.ServerPath, content.ContentType);
+		}
+
         //
         // GET: /Content/Create
 
@@ -45,25 +55,41 @@ namespace FSE_Subscription_App.Controllers
             return View();
         }
 
-        //
-        // POST: /Content/Create
+		//
+		// POST: /Content/Create
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Content content)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Content.Add(content);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(Content content, HttpPostedFileBase file)
+		{
+			if (ModelState.IsValid)
+			{
+				string companyName = db.Providers.Find(content.ProviderID).CompanyName;
+				string path = HttpContext.Server.MapPath("~/Uploaded_Content/" + companyName + "/");
 
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", content.ProviderID);
+				if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+				{
+					if (!Directory.Exists(path))
+					{
+						Directory.CreateDirectory(path);
+					}
 
-        
-            return View(content);
-        }
+					char[] separators = { '\\' }; 
+					string[] split = file.FileName.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+					string fileName = split[split.Length-1];
+					file.SaveAs(path + fileName);
+					content.ServerPath = path + fileName;
+					content.ContentType = file.ContentType;
+				}
+
+				db.Content.Add(content);
+				db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+
+			ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", content.ProviderID);
+			return View(content);
+		}
 
         //
         // GET: /Content/Edit/5
@@ -117,6 +143,8 @@ namespace FSE_Subscription_App.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Content content = db.Content.Find(id);
+			string filePath = content.ServerPath;
+			System.IO.File.Delete(filePath);
             db.Content.Remove(content);
             db.SaveChanges();
             return RedirectToAction("Index");

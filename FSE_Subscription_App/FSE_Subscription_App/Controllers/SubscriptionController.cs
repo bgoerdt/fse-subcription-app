@@ -40,14 +40,44 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Create()
         {
+			ViewBag.Contents = new SelectList(db.Content, "ID", "Name");
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName");
             return View();
         }
 
+		//
+		// POST: /Subscription/Create
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(Subscription subscription, IEnumerable<int> contents)
+		{
+			if (ModelState.ContainsKey("Contents"))
+				ModelState["Contents"].Errors.Clear();
+			if (ModelState.IsValid)
+			{
+				if (contents == null)
+					return View(subscription);
+
+				foreach (var content_id in contents)
+				{
+					var content = db.Content.Find(content_id);
+					subscription.Contents.Add(content);
+				}
+				db.Subscriptions.Add(subscription);
+				db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+
+			ViewBag.Contents = new SelectList(db.Content, "ID", "Name");
+			ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", subscription.ProviderID);
+			return View(subscription);
+		}
+
         //
         // POST: /Subscription/Create
 
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Subscription subscription)
         {
@@ -58,9 +88,10 @@ namespace FSE_Subscription_App.Controllers
                 return RedirectToAction("Index");
             }
 
+			ViewBag.Contents = new SelectList(db.Content, "ID", "Name");
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", subscription.ProviderID);
             return View(subscription);
-        }
+        }*/
 
         //
         // GET: /Subscription/Edit/5

@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<FSE_Subscription_App.Models.Content>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Content";
 }
 
-<h2>Index</h2>
+<h2>Content</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table>
     <tr>
+		<th>
+            @Html.DisplayNameFor(model => model.ServerPath)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -28,6 +31,9 @@
 
 @foreach (var item in Model) {
     <tr>
+		<td>
+            @Html.ActionLink(item.Name, "ViewContent", new { id=item.ID})
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
