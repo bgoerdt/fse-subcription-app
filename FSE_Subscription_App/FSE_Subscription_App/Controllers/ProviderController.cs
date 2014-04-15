@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
 
+
 namespace FSE_Subscription_App.Controllers
 {
     public class ProviderController : Controller
@@ -49,12 +50,16 @@ namespace FSE_Subscription_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Provider provider)
         {
+
+         
+            
             if (ModelState.IsValid)
             {
                 db.Providers.Add(provider);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
 
             return View(provider);
         }
