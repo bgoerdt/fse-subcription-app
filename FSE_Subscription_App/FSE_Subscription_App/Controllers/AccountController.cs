@@ -83,7 +83,7 @@ namespace FSE_Subscription_App.Controllers
 				{
                     //start here mail 
                     var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "MDG Productions");
-                    var toAddress = new MailAddress("gunnar-mills@uiowa.edu", model.UserName);
+                    var toAddress = new MailAddress(model.Email, model.UserName);
                     string fromPassword = "kickbutt";
                     string subject = "Welcome to MDG Productions";
                     string body = "Dear " + model.UserName + ":\n\n" + "I want to personally welcome you to MDG Productions. We speciallize in a new way to view content online. Here at MDG Productions you can view all you online content at amazing low prices. Our system is 100% reliable so you have worry about not getting you content. \n\n\n" + "Thanks! \n\nYour team at MDG Productions";
