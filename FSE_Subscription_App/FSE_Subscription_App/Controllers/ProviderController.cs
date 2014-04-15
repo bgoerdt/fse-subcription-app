@@ -6,8 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
-using System.Net; // added these two
-using System.Net.Mail;
+
 
 namespace FSE_Subscription_App.Controllers
 {
@@ -51,44 +50,15 @@ namespace FSE_Subscription_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Provider provider)
         {
+
+         
+            
             if (ModelState.IsValid)
             {
                 db.Providers.Add(provider);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-
-
-            //start here 
-            var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "From Name");
-            var toAddress = new MailAddress("gunnar-mills@uiowa.edu", "To Name");
-            string fromPassword = "kickbutt";
-            string subject = "Subject";
-            string body = "Body";
-
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            };
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            {
-                smtp.Send(message);
-            }
-
-
-            //end here 
-
-
 
 
             return View(provider);
