@@ -6,7 +6,8 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
@@ -37,6 +38,20 @@
             @Html.ValidationMessageFor(model => model.ProviderID)
         </div>
 
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Contents)
+		</div>
+
+		<div class="editor-field">
+			<div id="contents">
+				<div class="content">
+					@Html.DropDownList("Contents", String.Empty)
+					<button type="button" class="remove">Remove</button><br />
+				</div>
+			</div>
+			<button type="button" id="add">Add</button>
+		</div>
+
         <p>
             <input type="submit" value="Create" />
         </p>
@@ -49,4 +64,20 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/javascript" src="scripts/jquery-1.4.1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			var newContent = $('.content').clone();
+
+			$('#contents').delegate(".remove", "click", function () {
+				$(this).closest('.content').remove();
+			});
+
+			$('#add').click(function () {
+				$(newContent).clone().appendTo('#contents');
+			});
+
+		});
+	</script>
 }

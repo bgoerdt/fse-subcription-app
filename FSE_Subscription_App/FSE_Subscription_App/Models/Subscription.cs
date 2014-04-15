@@ -18,6 +18,6 @@ namespace FSE_Subscription_App.Models
 		public int ProviderID { get; set; }
 		public virtual Provider Provider { get; set; }
 
-		public virtual ICollection<Content> Content { get; set; }
+		public virtual ICollection<Content> Contents { get; set; }
 	}
 }
