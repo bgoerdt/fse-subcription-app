@@ -57,7 +57,7 @@
 	@foreach (var item in Model.Contents) {
 		<tr>
 			<td>
-				@Html.ActionLink(item.Name, "ViewContent", "Content", new { id=item.ID})
+				@Html.ActionLink(item.Name, "ViewContent", "Content", new { id=item.ID}, null)
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Name)

@@ -50,16 +50,12 @@ namespace FSE_Subscription_App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Provider provider)
         {
-
-         
-            
             if (ModelState.IsValid)
             {
                 db.Providers.Add(provider);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", provider);
             }
-
 
             return View(provider);
         }

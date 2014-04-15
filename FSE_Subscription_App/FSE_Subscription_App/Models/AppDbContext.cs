@@ -12,5 +12,6 @@ namespace FSE_Subscription_App.Models
 		public DbSet<Provider> Providers { get; set; }
 		public DbSet<Content> Content { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
+		public DbSet<UserProfile> UserProfiles { get; set; }
 	}
 }

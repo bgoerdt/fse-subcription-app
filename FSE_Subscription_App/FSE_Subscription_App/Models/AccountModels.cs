@@ -8,7 +8,7 @@ using System.Web.Security;
 
 namespace FSE_Subscription_App.Models
 {
-	public class UsersContext : DbContext
+	/*public class UsersContext : DbContext
 	{
 		public UsersContext()
 			: base("DefaultConnection")
@@ -16,7 +16,7 @@ namespace FSE_Subscription_App.Models
 		}
 
 		public DbSet<UserProfile> UserProfiles { get; set; }
-	}
+	}*/
 
 	[Table("UserProfile")]
 	public class UserProfile
@@ -25,6 +25,10 @@ namespace FSE_Subscription_App.Models
 		[DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
 		public int UserId { get; set; }
 		public string UserName { get; set; }
+		public bool ContentManager { get; set; }
+
+		public virtual Provider Provider { get; set; }
+		public virtual ICollection<Subscription> Subscriptions { get; set; }
 	}
 
 	public class RegisterExternalLoginModel
@@ -91,6 +95,9 @@ namespace FSE_Subscription_App.Models
 		[Display(Name = "Confirm password")]
 		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 		public string ConfirmPassword { get; set; }
+
+		[Display(Name = "Check if you are a content manager")]
+		public bool ContentManager { get; set; }
 	}
 
 	public class ExternalLogin

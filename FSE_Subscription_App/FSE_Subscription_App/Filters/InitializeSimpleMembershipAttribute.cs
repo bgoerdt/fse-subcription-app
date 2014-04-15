@@ -25,11 +25,11 @@ namespace FSE_Subscription_App.Filters
 		{
 			public SimpleMembershipInitializer()
 			{
-				Database.SetInitializer<UsersContext>(null);
+				Database.SetInitializer<AppDbContext>(null);
 
 				try
 				{
-					using (var context = new UsersContext())
+					using (var context = new AppDbContext())
 					{
 						if (!context.Database.Exists())
 						{
@@ -38,7 +38,7 @@ namespace FSE_Subscription_App.Filters
 						}
 					}
 
-					WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+					WebSecurity.InitializeDatabaseConnection("AppDbContext", "UserProfile", "UserId", "UserName", autoCreateTables: true);
 				}
 				catch (Exception ex)
 				{

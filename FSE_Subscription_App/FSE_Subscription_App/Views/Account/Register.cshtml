@@ -19,10 +19,10 @@
                 @Html.LabelFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
             </li>
-             <li>
-            @Html.LabelFor(m => m.Email)
-            @Html.TextBoxFor(m => m.Email)            
-        </li>
+            <li>
+				@Html.LabelFor(m => m.Email)
+				@Html.TextBoxFor(m => m.Email)            
+			</li>
             <li>
                 @Html.LabelFor(m => m.Password)
                 @Html.PasswordFor(m => m.Password)
@@ -31,6 +31,9 @@
                 @Html.LabelFor(m => m.ConfirmPassword)
                 @Html.PasswordFor(m => m.ConfirmPassword)
             </li>
+			<li>
+				@Html.LabelFor(m => m.ContentManager) @Html.CheckBoxFor(m => m.ContentManager)
+			</li>
         </ol>
         <input type="submit" value="Register" />
     </fieldset>

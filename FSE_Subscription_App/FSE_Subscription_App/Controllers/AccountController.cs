@@ -81,38 +81,43 @@ namespace FSE_Subscription_App.Controllers
 				// Attempt to register the user
 				try
 				{
-                    //start here mail 
-                    var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "MDG Productions");
-                    var toAddress = new MailAddress(model.Email, model.UserName);
-                    string fromPassword = "kickbutt";
-                    string subject = "Welcome to MDG Productions";
-                    string body = "Dear " + model.UserName + ":\n\n" + "I want to personally welcome you to MDG Productions. We speciallize in a new way to view content online. Here at MDG Productions you can view all you online content at amazing low prices. Our system is 100% reliable so you have worry about not getting you content. \n\n\n" + "Thanks! \n\nYour team at MDG Productions";
-
-                    var smtp = new SmtpClient
-                    {
-                        Host = "smtp.gmail.com",
-                        Port = 587,
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-                    };
-                    using (var message = new MailMessage(fromAddress, toAddress)
-                    {
-                        Subject = subject,
-                        Body = body
-                    })
-                    {
-                        smtp.Send(message);
-                    }
-                    //end here mail 
-                    
-                    
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+					WebSecurity.CreateUserAndAccount(model.UserName, model.Password, propertyValues: new { ContentManager = model.ContentManager });
 					WebSecurity.Login(model.UserName, model.Password);
-					return RedirectToAction("Index", "Home");
-                    
-                   
+
+					//start here mail 
+					var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "MDG Productions");
+					var toAddress = new MailAddress(model.Email, model.UserName);
+					string fromPassword = "kickbutt";
+					string subject = "Welcome to MDG Productions";
+					string body = "";
+					if (model.ContentManager)
+						body = "Dear " + model.UserName + ":\n\n" + "I want to personally welcome you to MDG Productions. We specialize in a new way to view content online. Here at MDG Productions you can view all your online content at amazing low prices. Our system is 100% reliable so you don't have worry about not getting your content. \n\n\n" + "Thanks! \n\nYour team at MDG Productions";
+					else
+						body = "Dear " + model.UserName + ":\n\n" + "I want to personally welcome you to MDG Productions. We specialize in a new way to view content online. We look forward to helping you get your company's content to your audience easier and more efficiently than you ever have been able to before. \n\n\n" + "Thanks! \n\nYour team at MDG Productions";
+
+					var smtp = new SmtpClient
+					{
+						Host = "smtp.gmail.com",
+						Port = 587,
+						EnableSsl = true,
+						DeliveryMethod = SmtpDeliveryMethod.Network,
+						UseDefaultCredentials = false,
+						Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+					};
+					using (var message = new MailMessage(fromAddress, toAddress)
+					{
+						Subject = subject,
+						Body = body
+					})
+					{
+						smtp.Send(message);
+					}
+					//end here mail 
+
+					if (model.ContentManager)
+						return RedirectToAction("Create", "Provider");
+					else
+						return RedirectToAction("Index", "Home");
 				}
 				catch (MembershipCreateUserException e)
 				{
@@ -294,7 +299,7 @@ namespace FSE_Subscription_App.Controllers
 			if (ModelState.IsValid)
 			{
 				// Insert a new user into the database
-				using (UsersContext db = new UsersContext())
+				using (AppDbContext db = new AppDbContext())
 				{
 					UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
 					// Check if user already exists
