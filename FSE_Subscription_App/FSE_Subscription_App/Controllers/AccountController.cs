@@ -10,6 +10,8 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using FSE_Subscription_App.Filters;
 using FSE_Subscription_App.Models;
+using System.Net; // used for mailing 
+using System.Net.Mail; // used for mailing 
 
 namespace FSE_Subscription_App.Controllers
 {
@@ -79,9 +81,38 @@ namespace FSE_Subscription_App.Controllers
 				// Attempt to register the user
 				try
 				{
-					WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                    //start here mail 
+                    var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "MDG Productions");
+                    var toAddress = new MailAddress(model.Email, model.UserName);
+                    string fromPassword = "kickbutt";
+                    string subject = "Welcome to MDG Productions";
+                    string body = "Dear " + model.UserName + ":\n\n" + "I want to personally welcome you to MDG Productions. We speciallize in a new way to view content online. Here at MDG Productions you can view all you online content at amazing low prices. Our system is 100% reliable so you have worry about not getting you content. \n\n\n" + "Thanks! \n\nYour team at MDG Productions";
+
+                    var smtp = new SmtpClient
+                    {
+                        Host = "smtp.gmail.com",
+                        Port = 587,
+                        EnableSsl = true,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                    };
+                    using (var message = new MailMessage(fromAddress, toAddress)
+                    {
+                        Subject = subject,
+                        Body = body
+                    })
+                    {
+                        smtp.Send(message);
+                    }
+                    //end here mail 
+                    
+                    
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
 					WebSecurity.Login(model.UserName, model.Password);
 					return RedirectToAction("Index", "Home");
+                    
+                   
 				}
 				catch (MembershipCreateUserException e)
 				{
