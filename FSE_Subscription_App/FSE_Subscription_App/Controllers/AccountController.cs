@@ -84,6 +84,11 @@ namespace FSE_Subscription_App.Controllers
 					WebSecurity.CreateUserAndAccount(model.UserName, model.Password, propertyValues: new { ContentManager = model.ContentManager });
 					WebSecurity.Login(model.UserName, model.Password);
 
+					if (!Roles.RoleExists("ContentManager"))
+					{
+						Roles.CreateRole("ContentManager");
+					}
+
 					//start here mail 
 					var fromAddress = new MailAddress("uiowafundofsoftwareeng@gmail.com", "MDG Productions");
 					var toAddress = new MailAddress(model.Email, model.UserName);
@@ -115,7 +120,10 @@ namespace FSE_Subscription_App.Controllers
 					//end here mail 
 
 					if (model.ContentManager)
+					{
+						Roles.AddUserToRole(model.UserName, "ContentManager");
 						return RedirectToAction("Create", "Provider");
+					}
 					else
 						return RedirectToAction("Index", "Home");
 				}

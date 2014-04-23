@@ -9,6 +9,7 @@ using FSE_Subscription_App.Models;
 
 namespace FSE_Subscription_App.Controllers
 {
+	[Authorize]
     public class SubscriptionController : Controller
     {
         private AppDbContext db = new AppDbContext();
@@ -37,7 +38,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Subscription/Create
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Create()
         {
 			ViewBag.Contents = new SelectList(db.Content, "ID", "Name");
@@ -50,6 +51,7 @@ namespace FSE_Subscription_App.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
 		public ActionResult Create(Subscription subscription, IEnumerable<int> contents)
 		{
 			if (ModelState.ContainsKey("Contents"))
@@ -95,7 +97,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Subscription/Edit/5
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(int id = 0)
         {
             Subscription subscription = db.Subscriptions.Find(id);
@@ -112,6 +114,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(Subscription subscription)
         {
             if (ModelState.IsValid)
