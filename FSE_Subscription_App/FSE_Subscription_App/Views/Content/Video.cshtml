@@ -1,0 +1,25 @@
+﻿@model FSE_Subscription_App.Models.Content
+
+@{
+    ViewBag.Title = "Video";
+}
+
+
+<h2>@Model.Name</h2>
+@Html.DisplayFor(model => model.Provider.CompanyName)<br /><br />
+
+@Video.MediaPlayer(
+    path: "/Uploaded_Content/MyCompany/Wildlife.wmv",
+	width: "600",
+    height: "400",
+    autoStart: true,
+    uiMode:  "full",
+    stretchToFit: true,
+    enableContextMenu: true,
+    mute: false,
+    volume: 75)
+
+<br /><br />
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

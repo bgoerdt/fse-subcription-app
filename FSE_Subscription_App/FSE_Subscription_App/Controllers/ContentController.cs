@@ -19,13 +19,13 @@ namespace FSE_Subscription_App.Controllers
         // GET: /Content/
         public ActionResult Index()
         {
-			/*Content audioTest = new Content();
-			audioTest.ContentType = "audio/mp3";
-			audioTest.Description = "mp3 test";
-			audioTest.Name = "audio test 2";
-			audioTest.ProviderID = 1;
-			audioTest.ServerPath = "\\\\engin.uiowa.edu\\stuff\\Home\\bgoerdt\\Documents\\fse-subcription-app\\FSE_Subscription_App\\FSE_Subscription_App\\Uploaded_Content\\MyCompany\\Kalimba.mp3";
-			db.Content.Add(audioTest);
+			/*Content videoTest = new Content();
+			videoTest.ContentType = "video/wmv";
+			videoTest.Description = "video test";
+			videoTest.Name = "video test - wmv";
+			videoTest.ProviderID = 1;
+			videoTest.ServerPath = "\\\\engin.uiowa.edu\\stuff\\Home\\bgoerdt\\Documents\\fse-subcription-app\\FSE_Subscription_App\\FSE_Subscription_App\\Uploaded_Content\\MyCompany\\Wildlife.wmv";
+			db.Content.Add(videoTest);
 			db.SaveChanges();*/
 
 			var content = db.Content.Include(c => c.Provider);
@@ -43,7 +43,23 @@ namespace FSE_Subscription_App.Controllers
             }
             return View(content);
         }
-		
+
+		public ActionResult Video(int id = 0)
+		{
+			Content content = db.Content.Find(id);
+			if (content == null)
+			{
+				return null;
+			}
+
+			char[] separator = { '\\' };
+			string[] pathSplit = content.ServerPath.Split(separator);
+			string path = "/Uploaded_Content/" + pathSplit[pathSplit.Length - 2] + "/" + pathSplit[pathSplit.Length - 1];
+
+			ViewBag.path = path;
+			return View(content);
+		}
+
 		public ActionResult Audio(int id = 0)
 		{
 			Content content = db.Content.Find(id);
