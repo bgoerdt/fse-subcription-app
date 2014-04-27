@@ -46,7 +46,18 @@ namespace FSE_Subscription_App.Controllers
 		
 		public ActionResult Audio(int id = 0)
 		{
-			return View();
+			Content content = db.Content.Find(id);
+			if (content == null)
+			{
+				return null;
+			}
+
+			char[] separator = {'\\'};
+			string[] pathSplit = content.ServerPath.Split(separator);
+			string path = "/Uploaded_Content/" + pathSplit[pathSplit.Length - 2] + "/" + pathSplit[pathSplit.Length - 1];
+
+			ViewBag.path = path;
+			return View(content);
 		}
 
 		public FilePathResult ViewContent(int id = 0)

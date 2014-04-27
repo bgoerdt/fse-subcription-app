@@ -1,9 +1,18 @@
-﻿@{
+﻿@model FSE_Subscription_App.Models.Content
+
+@{
     ViewBag.Title = "Audio";
 }
 
-<h2>Audio</h2>
+<h2>@Model.Name</h2>
+@Html.DisplayFor(model => model.Provider.CompanyName)<br /><br />
 
 <audio autoplay="autoplay" controls="controls" >
-	<source src="~/Uploaded_Content/MyCompany/Kalimba.mp3" type="audio/mp3"/>
+	<source src="@ViewBag.path" type="audio/mp3"/>
 </audio>
+
+<br /><br />
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
