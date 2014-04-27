@@ -24,7 +24,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Details/5
-
+		[Authorize]
         public ActionResult Details(int id = 0)
         {
             Provider provider = db.Providers.Find(id);
@@ -37,7 +37,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Create
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Create()
         {
             return View();
@@ -48,6 +48,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Create(Provider provider)
         {
             if (ModelState.IsValid)
@@ -62,7 +63,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Edit/5
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(int id = 0)
         {
             Provider provider = db.Providers.Find(id);
@@ -78,6 +79,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(Provider provider)
         {
             if (ModelState.IsValid)
@@ -91,7 +93,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Delete/5
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Delete(int id = 0)
         {
             Provider provider = db.Providers.Find(id);
@@ -107,6 +109,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
         public ActionResult DeleteConfirmed(int id)
         {
             Provider provider = db.Providers.Find(id);

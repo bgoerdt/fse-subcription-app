@@ -10,13 +10,13 @@ using System.IO;
 
 namespace FSE_Subscription_App.Controllers
 {
+	[Authorize]
     public class ContentController : Controller
     {
         private AppDbContext db = new AppDbContext();
 
         //
         // GET: /Content/
-
         public ActionResult Index()
         {
 			/*Content audioTest = new Content();
@@ -34,7 +34,6 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Content/Details/5
-
         public ActionResult Details(int id = 0)
         {
             Content content = db.Content.Find(id);
@@ -44,7 +43,7 @@ namespace FSE_Subscription_App.Controllers
             }
             return View(content);
         }
-
+		
 		public ActionResult Audio(int id = 0)
 		{
 			return View();
@@ -63,7 +62,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Content/Create
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Create()
         {
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName");
@@ -75,6 +74,7 @@ namespace FSE_Subscription_App.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
 		public ActionResult Create(Content content, HttpPostedFileBase file)
 		{
 			if (ModelState.IsValid)
@@ -108,7 +108,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Content/Edit/5
-
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(int id = 0)
         {
             Content content = db.Content.Find(id);
@@ -125,6 +125,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "ContentManager")]
         public ActionResult Edit(Content content)
         {
             if (ModelState.IsValid)
@@ -159,7 +160,8 @@ namespace FSE_Subscription_App.Controllers
         {
             Content content = db.Content.Find(id);
 			string filePath = content.ServerPath;
-			System.IO.File.Delete(filePath);
+			if(System.IO.File.Exists(filePath))
+				System.IO.File.Delete(filePath);
             db.Content.Remove(content);
             db.SaveChanges();
             return RedirectToAction("Index");
