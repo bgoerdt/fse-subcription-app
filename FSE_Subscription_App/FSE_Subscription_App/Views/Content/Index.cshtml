@@ -32,8 +32,15 @@
 @foreach (var item in Model) {
     <tr>
 		<td>
-            @Html.ActionLink(item.Name, "ViewContent", new { id=item.ID})
-        </td>
+			@if (item.ContentType == "audio/mp3")
+			{
+				@Html.ActionLink(item.Name, "Audio", new { id=item.ID})
+			}
+			else 
+			{
+				@Html.ActionLink(item.Name, "ViewContent", new { id=item.ID})
+			}
+		</td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>

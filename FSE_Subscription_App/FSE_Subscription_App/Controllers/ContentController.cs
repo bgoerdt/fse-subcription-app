@@ -19,7 +19,16 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Index()
         {
-            var content = db.Content.Include(c => c.Provider);
+			/*Content audioTest = new Content();
+			audioTest.ContentType = "audio/mp3";
+			audioTest.Description = "mp3 test";
+			audioTest.Name = "audio test 2";
+			audioTest.ProviderID = 1;
+			audioTest.ServerPath = "\\\\engin.uiowa.edu\\stuff\\Home\\bgoerdt\\Documents\\fse-subcription-app\\FSE_Subscription_App\\FSE_Subscription_App\\Uploaded_Content\\MyCompany\\Kalimba.mp3";
+			db.Content.Add(audioTest);
+			db.SaveChanges();*/
+
+			var content = db.Content.Include(c => c.Provider);
             return View(content.ToList());
         }
 
@@ -36,6 +45,11 @@ namespace FSE_Subscription_App.Controllers
             return View(content);
         }
 
+		public ActionResult Audio(int id = 0)
+		{
+			return View();
+		}
+
 		public FilePathResult ViewContent(int id = 0)
 		{
 			Content content = db.Content.Find(id);
@@ -43,6 +57,7 @@ namespace FSE_Subscription_App.Controllers
 			{
 				return null;
 			}
+
 			return new FilePathResult(content.ServerPath, content.ContentType);
 		}
 

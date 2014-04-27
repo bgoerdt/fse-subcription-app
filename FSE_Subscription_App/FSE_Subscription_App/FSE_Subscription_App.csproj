@@ -322,6 +322,7 @@
     <Content Include="Views\Subscription\Create.cshtml" />
     <Content Include="Views\Subscription\Edit.cshtml" />
     <Content Include="Views\Subscription\Delete.cshtml" />
+    <Content Include="Views\Content\Audio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
