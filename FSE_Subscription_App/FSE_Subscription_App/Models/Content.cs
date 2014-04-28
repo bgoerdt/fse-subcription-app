@@ -12,7 +12,9 @@ namespace FSE_Subscription_App.Models
 	public class Content
 	{
 		public int ID { get; set; }
+		[Required]
 		public string Name { get; set; }
+		[Required]
 		public string Type { get; set; }
 		public string Description { get; set; }
 		[DisplayName("File")]
@@ -23,5 +25,6 @@ namespace FSE_Subscription_App.Models
 		public int ProviderID { get; set; }
 		public virtual Provider Provider { get; set; }
 
+		public virtual ICollection<Subscription> Subscriptions { get; set; }
 	}
 }

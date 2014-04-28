@@ -2,19 +2,24 @@
     ViewBag.Title = "MDG Productions";
 }
 @{
-    ViewBag.Message = "A New Way to Get Your Online Content";
+    ViewBag.Subtitle = "A New Way to Get Your Online Content";
 }
 @section featured {
     <section class="featured">
         <div class="content-wrapper">
             <hgroup class="title">
                 <h1>@ViewBag.Title</h1>
-                <h2>@ViewBag.Message</h2>
+                <h2>@ViewBag.Subtitle</h2>
             </hgroup>
+			<h3 style="text-align:center">@ViewBag.Message</h3>
         </div>
     </section>
 }
 
-<h3>@Html.ActionLink("Content", "Index", "Content")</h3>
+<h3>For testing only: @Html.ActionLink("Content", "Index", "Content")</h3>
+
 <h3>@Html.ActionLink("Providers", "Index", "Provider")</h3>
-<h3>@Html.ActionLink("Subscriptions", "Index", "Subscription")</h3>
+@if(User.Identity.IsAuthenticated)
+{
+	<h3>@Html.ActionLink("Subscriptions", "Index", "Subscription")</h3>
+}

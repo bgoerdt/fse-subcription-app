@@ -1,0 +1,40 @@
+﻿@model FSE_Subscription_App.Models.Subscription
+
+@{
+    ViewBag.Title = "Subscribe";
+}
+
+<h2>Subscribe</h2>
+
+<h3>Are you sure you want to subscribe to this?</h3><br />
+<fieldset>
+    <legend>Subscription</legend>
+
+    <div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.SubscriptionName)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubscriptionName)
+    </div>
+
+    <div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.Description)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.Provider.CompanyName)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Provider.CompanyName)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Confirm Payment" /><br /><br />
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -6,10 +6,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
+using WebMatrix.WebData;
+using FSE_Subscription_App.Filters;
 
 
 namespace FSE_Subscription_App.Controllers
 {
+	[InitializeSimpleMembership]
     public class ProviderController : Controller
     {
         private AppDbContext db = new AppDbContext();
@@ -19,6 +22,10 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Index()
         {
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
             return View(db.Providers.ToList());
         }
 
@@ -32,6 +39,12 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
+			var subs = db.Subscriptions.Where(sub => sub.ProviderID == provider.ID);
+			ViewBag.Subscriptions = subs;
             return View(provider);
         }
 
@@ -54,6 +67,8 @@ namespace FSE_Subscription_App.Controllers
             if (ModelState.IsValid)
             {
                 db.Providers.Add(provider);
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				user.Provider = provider;
                 db.SaveChanges();
                 return RedirectToAction("Details", provider);
             }

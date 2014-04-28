@@ -15,7 +15,7 @@
         <legend>Subscription</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.SubscriptionName)
+            <b>@Html.LabelFor(model => model.SubscriptionName)</b>
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.SubscriptionName)
@@ -23,7 +23,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
+            <b>@Html.LabelFor(model => model.Description)</b>
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.Description)
@@ -31,15 +31,15 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.ProviderID, "Provider")
+            <b>@Html.LabelFor(model => model.ProviderID, "Provider")</b>
         </div>
         <div class="editor-field">
-            @Html.DropDownList("ProviderID", String.Empty)
+            @ViewBag.Provider
             @Html.ValidationMessageFor(model => model.ProviderID)
         </div>
 
 		<div class="editor-label">
-			@Html.LabelFor(model => model.Contents)
+			<b>@Html.LabelFor(model => model.Contents)</b>
 		</div>
 
 		<div class="editor-field">

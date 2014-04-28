@@ -10,20 +10,64 @@
     <legend>Provider</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.CompanyName)
+         <strong>@Html.DisplayNameFor(model => model.CompanyName)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.CompanyName)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.SiteLink)
+         <strong>@Html.DisplayNameFor(model => model.SiteLink)</strong>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.SiteLink)
+        <a href="@Model.SiteLink" target="_blank">@Html.DisplayFor(model => model.SiteLink)</a>
     </div>
 </fieldset>
+
+<h2>Subscriptions</h2>
+
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th></th>
+		<th></th>
+    </tr>
+
+@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions) {
+    <tr>
+        <td>
+           @Html.ActionLink(subscription.SubscriptionName, "Details", "Subscription", new { id = subscription.ID }, new object { })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => subscription.Description)
+        </td>
+		<td>
+			@if(!User.IsInRole("ContentManager"))
+			{
+				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })'" />
+			}
+	   </td>
+        <td>
+			@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == subscription.ProviderID)
+			{
+				@Html.ActionLink("Edit", "Edit", "Subscription", new { id = subscription.ID }, new object { }) @: |
+				@Html.ActionLink("Delete", "Delete", "Subscription", new { id = subscription.ID }, new object { })
+			}
+		</td>
+    </tr>
+}
+
+</table>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+	@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == Model.ID)
+	{
+		@Html.ActionLink("Edit", "Edit", new { id=Model.ID }) @: |
+	}
     @Html.ActionLink("Back to List", "Index")
 </p>
