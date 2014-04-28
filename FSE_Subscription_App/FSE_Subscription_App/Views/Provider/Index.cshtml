@@ -23,7 +23,7 @@
             @Html.DisplayFor(modelItem => item.CompanyName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SiteLink)
+            <a href="@item.SiteLink">@Html.DisplayFor(modelItem => item.SiteLink)</a>
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

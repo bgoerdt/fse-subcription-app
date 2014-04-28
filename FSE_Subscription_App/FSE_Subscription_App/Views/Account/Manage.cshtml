@@ -11,6 +11,51 @@
 
 <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
 
+@if (User.IsInRole("ContentManager"))
+{
+	<p>You are a Content Manager for @ViewBag.Provider</p>
+}
+else
+{
+	<h2>My Subscriptions</h2>
+	<table>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Description
+			</th>
+			<th>
+				Company Name
+			</th>
+			<th></th>
+		</tr>
+
+	@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions)
+	{
+	    <tr>
+			<td>
+			   @Html.ActionLink(subscription.SubscriptionName, "Details", new { id=subscription.ID })
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => subscription.Description)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => subscription.Provider.CompanyName)
+			</td>
+			<td>
+				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })'" />
+			</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { id=subscription.ID }) |
+				@Html.ActionLink("Delete", "Delete", new { id=subscription.ID })
+			</td>
+		</tr>
+	}
+	</table>
+}
+
 @if (ViewBag.HasLocalPassword)
 {
     @Html.Partial("_ChangePasswordPartial")
@@ -19,13 +64,6 @@ else
 { 
     @Html.Partial("_SetPasswordPartial")
 }
-
-<section id="externalLogins">
-    @Html.Action("RemoveExternalLogins")
-
-    <h3>Add an external login</h3>
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

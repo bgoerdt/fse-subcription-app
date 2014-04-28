@@ -21,6 +21,7 @@
             @Html.DisplayNameFor(model => model.Provider.CompanyName)
         </th>
         <th></th>
+		<th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -34,6 +35,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.Provider.CompanyName)
         </td>
+		<td>
+			<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=item.ID })'" />
+		</td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.ID })

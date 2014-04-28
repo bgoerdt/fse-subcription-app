@@ -6,10 +6,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FSE_Subscription_App.Models;
+using WebMatrix.WebData;
+using FSE_Subscription_App.Filters;
 
 
 namespace FSE_Subscription_App.Controllers
 {
+	[InitializeSimpleMembership]
     public class ProviderController : Controller
     {
         private AppDbContext db = new AppDbContext();
@@ -54,6 +57,8 @@ namespace FSE_Subscription_App.Controllers
             if (ModelState.IsValid)
             {
                 db.Providers.Add(provider);
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				user.Provider = provider;
                 db.SaveChanges();
                 return RedirectToAction("Details", provider);
             }

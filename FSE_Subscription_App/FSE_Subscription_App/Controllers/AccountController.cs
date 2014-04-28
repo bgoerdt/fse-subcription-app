@@ -19,6 +19,8 @@ namespace FSE_Subscription_App.Controllers
 	[InitializeSimpleMembership]
 	public class AccountController : Controller
 	{
+		private AppDbContext db = new AppDbContext();
+
 		//
 		// GET: /Account/Login
 
@@ -171,6 +173,10 @@ namespace FSE_Subscription_App.Controllers
 
 		public ActionResult Manage(ManageMessageId? message)
 		{
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.Provider = user.Provider.CompanyName;
+			ViewBag.Subscriptions = user.Subscriptions;
+
 			ViewBag.StatusMessage =
 				message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
 				: message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
