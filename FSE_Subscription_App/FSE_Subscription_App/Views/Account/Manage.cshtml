@@ -11,6 +11,43 @@
 
 <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
 
+@if (User.IsInRole("ContentManager"))
+{
+	<p>You are a Content Manager for <strong>@ViewBag.Provider</strong></p>
+}
+else
+{
+	<h2>My Subscriptions</h2>
+	<table>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Description
+			</th>
+			<th>
+				Company Name
+			</th>
+		</tr>
+
+	@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions)
+	{
+	    <tr>
+			<td>
+			   @Html.ActionLink(subscription.SubscriptionName, "Details", "Subscription", new { id = subscription.ID }, new { })
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => subscription.Description)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => subscription.Provider.CompanyName)
+			</td>
+		</tr>
+	}
+	</table>
+}
+
 @if (ViewBag.HasLocalPassword)
 {
     @Html.Partial("_ChangePasswordPartial")
@@ -19,13 +56,6 @@ else
 { 
     @Html.Partial("_SetPasswordPartial")
 }
-
-<section id="externalLogins">
-    @Html.Action("RemoveExternalLogins")
-
-    <h3>Add an external login</h3>
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

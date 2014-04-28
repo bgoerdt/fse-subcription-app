@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<FSE_Subscription_App.Models.Provider>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Providers";
 }
 
 <h2>Providers</h2>
@@ -23,12 +23,15 @@
             @Html.DisplayFor(modelItem => item.CompanyName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SiteLink)
+            <a href="@item.SiteLink" target="_blank">@Html.DisplayFor(modelItem => item.SiteLink)</a>
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			@Html.ActionLink("Details", "Details", new { id=item.ID })
+			@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == item.ID)
+			{
+				@: |
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID })
+			}
         </td>
     </tr>
 }

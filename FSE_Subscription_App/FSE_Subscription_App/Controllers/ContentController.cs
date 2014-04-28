@@ -19,7 +19,16 @@ namespace FSE_Subscription_App.Controllers
         // GET: /Content/
         public ActionResult Index()
         {
-            var content = db.Content.Include(c => c.Provider);
+			/*Content videoTest = new Content();
+			videoTest.ContentType = "video/wmv";
+			videoTest.Description = "video test";
+			videoTest.Name = "video test - wmv";
+			videoTest.ProviderID = 1;
+			videoTest.ServerPath = "\\Uploaded_Content\\MyCompany\\Wildlife.wmv";
+			db.Content.Add(videoTest);
+			db.SaveChanges();*/
+
+			var content = db.Content.Include(c => c.Provider);
             return View(content.ToList());
         }
 
@@ -34,7 +43,31 @@ namespace FSE_Subscription_App.Controllers
             }
             return View(content);
         }
-		
+
+		public ActionResult Video(int id = 0)
+		{
+			Content content = db.Content.Find(id);
+			if (content == null)
+			{
+				return null;
+			}
+
+			ViewBag.path = content.ServerPath;
+			return View(content);
+		}
+
+		public ActionResult Audio(int id = 0)
+		{
+			Content content = db.Content.Find(id);
+			if (content == null)
+			{
+				return null;
+			}
+
+			ViewBag.path = content.ServerPath;
+			return View(content);
+		}
+
 		public FilePathResult ViewContent(int id = 0)
 		{
 			Content content = db.Content.Find(id);
@@ -42,6 +75,7 @@ namespace FSE_Subscription_App.Controllers
 			{
 				return null;
 			}
+
 			return new FilePathResult(content.ServerPath, content.ContentType);
 		}
 
@@ -78,7 +112,7 @@ namespace FSE_Subscription_App.Controllers
 					string[] split = file.FileName.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 					string fileName = split[split.Length-1];
 					file.SaveAs(path + fileName);
-					content.ServerPath = path + fileName;
+					content.ServerPath = "/Uploaded_Content/" + companyName + "/" + fileName;
 					content.ContentType = file.ContentType;
 				}
 

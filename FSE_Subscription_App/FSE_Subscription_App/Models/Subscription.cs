@@ -11,6 +11,8 @@ namespace FSE_Subscription_App.Models
 	public class Subscription
 	{
 		public int ID { get; set; }
+		[Required]
+		[Display(Name = "Name")]
 		public string SubscriptionName { get; set; }
 		public string Description { get; set; }
 

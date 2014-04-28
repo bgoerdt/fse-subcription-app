@@ -10,28 +10,25 @@
     <legend>Subscription</legend>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.SubscriptionName)
+         <strong>@Html.DisplayNameFor(model => model.SubscriptionName)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SubscriptionName)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Description)
+         <strong>@Html.DisplayNameFor(model => model.Description)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.Provider.CompanyName)
+         <strong>@Html.DisplayNameFor(model => model.Provider.CompanyName)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Provider.CompanyName)
     </div>
-	<div class="display-label">
-		@Html.DisplayNameFor(model => model.Contents)
-	</div>
 
 	<h2>Contents</h2>
 
@@ -57,7 +54,18 @@
 	@foreach (var item in Model.Contents) {
 		<tr>
 			<td>
-				@Html.ActionLink(item.Name, "ViewContent", "Content", new { id=item.ID}, null)
+				@if (item.ContentType == "audio/mp3")
+				{
+					@Html.ActionLink(item.Name, "Audio", "Content", new { id = item.ID }, new object { })
+				}
+				else if (item.ContentType == "video/wmv")
+				{
+					@Html.ActionLink(item.Name, "Video", "Content", new { id = item.ID }, new object { })
+				}
+				else 
+				{
+					@Html.ActionLink(item.Name, "ViewContent", "Content", new { id = item.ID }, new object { })
+				}
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Name)
@@ -76,6 +84,9 @@
 	</table>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+	@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == Model.ProviderID)
+	{
+		@Html.ActionLink("Edit", "Edit", new { id=Model.ID }) @: |
+	}
     @Html.ActionLink("Back to List", "Index")
 </p>
