@@ -35,7 +35,7 @@
             @Html.LabelFor(model => model.ProviderID, "Provider")
         </div>
         <div class="editor-field">
-            @Html.DropDownList("ProviderID", String.Empty)
+            @ViewBag.Provider
             @Html.ValidationMessageFor(model => model.ProviderID)
         </div>
 

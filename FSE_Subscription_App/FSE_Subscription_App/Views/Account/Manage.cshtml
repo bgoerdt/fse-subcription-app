@@ -3,17 +3,14 @@
     ViewBag.Title = "Manage Account";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<p class="message-success">@ViewBag.StatusMessage</p>
-
-<p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
-
 @if (User.IsInRole("ContentManager"))
 {
 	<p>You are a Content Manager for <strong>@ViewBag.Provider</strong></p>
+}
+else if(ViewBag.Subscriptions.Count == 0)
+{
+	<h2>My Subscriptions</h2>
+	<h3>You are not subscribed to any content.</h3>
 }
 else
 {
@@ -29,6 +26,7 @@ else
 			<th>
 				Company Name
 			</th>
+			<th></th>
 		</tr>
 
 	@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions)
@@ -43,10 +41,22 @@ else
 			<td>
 				@Html.DisplayFor(modelItem => subscription.Provider.CompanyName)
 			</td>
+			<td>
+				<input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=subscription.ID })	'" />
+			</td>
 		</tr>
 	}
 	</table>
 }
+
+<br /><br />
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<p class="message-success">@ViewBag.StatusMessage</p>
+
+<p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
 
 @if (ViewBag.HasLocalPassword)
 {
