@@ -13,7 +13,7 @@
 
 @if (User.IsInRole("ContentManager"))
 {
-	<p>You are a Content Manager for @ViewBag.Provider</p>
+	<p>You are a Content Manager for <strong>@ViewBag.Provider</strong></p>
 }
 else
 {
@@ -29,27 +29,19 @@ else
 			<th>
 				Company Name
 			</th>
-			<th></th>
 		</tr>
 
 	@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions)
 	{
 	    <tr>
 			<td>
-			   @Html.ActionLink(subscription.SubscriptionName, "Details", new { id=subscription.ID })
+			   @Html.ActionLink(subscription.SubscriptionName, "Details", "Subscription", new { id = subscription.ID }, new { })
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => subscription.Description)
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => subscription.Provider.CompanyName)
-			</td>
-			<td>
-				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })'" />
-			</td>
-			<td>
-				@Html.ActionLink("Edit", "Edit", new { id=subscription.ID }) |
-				@Html.ActionLink("Delete", "Delete", new { id=subscription.ID })
 			</td>
 		</tr>
 	}

@@ -22,6 +22,10 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Index()
         {
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
             return View(subscriptions.ToList());
         }
@@ -36,6 +40,10 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
             return View(subscription);
         }
 
@@ -44,8 +52,9 @@ namespace FSE_Subscription_App.Controllers
 		[Authorize(Roles = "ContentManager")]
         public ActionResult Create()
         {
-			ViewBag.Contents = new SelectList(db.Content, "ID", "Name");
-            ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName");
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.Contents = new SelectList(db.Content.Where(c => c.ProviderID == user.Provider.ID), "ID", "Name");
+			ViewBag.Provider = user.Provider.CompanyName;
             return View();
         }
 
@@ -68,7 +77,11 @@ namespace FSE_Subscription_App.Controllers
 				{
 					var content = db.Content.Find(content_id);
 					subscription.Contents.Add(content);
+					content.Subscriptions.Add(subscription);
 				}
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				subscription.ProviderID = user.Provider.ID;
+				subscription.Provider = user.Provider;
 				db.Subscriptions.Add(subscription);
 				db.SaveChanges();
 				return RedirectToAction("Index");
@@ -163,6 +176,10 @@ namespace FSE_Subscription_App.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Subscription subscription = db.Subscriptions.Find(id);
+			foreach (Content content in subscription.Contents)
+			{
+				content.Subscriptions.Remove(subscription);
+			}
             db.Subscriptions.Remove(subscription);
             db.SaveChanges();
             return RedirectToAction("Index");

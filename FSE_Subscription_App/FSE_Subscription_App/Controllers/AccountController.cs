@@ -174,7 +174,8 @@ namespace FSE_Subscription_App.Controllers
 		public ActionResult Manage(ManageMessageId? message)
 		{
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
-			ViewBag.Provider = user.Provider.CompanyName;
+			if(user.Provider != null)
+				ViewBag.Provider = user.Provider.CompanyName;
 			ViewBag.Subscriptions = user.Subscriptions;
 
 			ViewBag.StatusMessage =

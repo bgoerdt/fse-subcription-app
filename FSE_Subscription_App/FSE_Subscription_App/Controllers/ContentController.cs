@@ -24,7 +24,7 @@ namespace FSE_Subscription_App.Controllers
 			videoTest.Description = "video test";
 			videoTest.Name = "video test - wmv";
 			videoTest.ProviderID = 1;
-			videoTest.ServerPath = "\\\\engin.uiowa.edu\\stuff\\Home\\bgoerdt\\Documents\\fse-subcription-app\\FSE_Subscription_App\\FSE_Subscription_App\\Uploaded_Content\\MyCompany\\Wildlife.wmv";
+			videoTest.ServerPath = "\\Uploaded_Content\\MyCompany\\Wildlife.wmv";
 			db.Content.Add(videoTest);
 			db.SaveChanges();*/
 
@@ -52,11 +52,7 @@ namespace FSE_Subscription_App.Controllers
 				return null;
 			}
 
-			char[] separator = { '\\' };
-			string[] pathSplit = content.ServerPath.Split(separator);
-			string path = "/Uploaded_Content/" + pathSplit[pathSplit.Length - 2] + "/" + pathSplit[pathSplit.Length - 1];
-
-			ViewBag.path = path;
+			ViewBag.path = content.ServerPath;
 			return View(content);
 		}
 
@@ -68,11 +64,7 @@ namespace FSE_Subscription_App.Controllers
 				return null;
 			}
 
-			char[] separator = {'\\'};
-			string[] pathSplit = content.ServerPath.Split(separator);
-			string path = "/Uploaded_Content/" + pathSplit[pathSplit.Length - 2] + "/" + pathSplit[pathSplit.Length - 1];
-
-			ViewBag.path = path;
+			ViewBag.path = content.ServerPath;
 			return View(content);
 		}
 
@@ -120,7 +112,7 @@ namespace FSE_Subscription_App.Controllers
 					string[] split = file.FileName.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 					string fileName = split[split.Length-1];
 					file.SaveAs(path + fileName);
-					content.ServerPath = path + fileName;
+					content.ServerPath = "/Uploaded_Content/" + companyName + "/" + fileName;
 					content.ContentType = file.ContentType;
 				}
 

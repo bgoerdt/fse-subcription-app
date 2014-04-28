@@ -22,6 +22,10 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Index()
         {
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
             return View(db.Providers.ToList());
         }
 
@@ -35,6 +39,12 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
+			if (User.IsInRole("ContentManager"))
+			{
+				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+			}
+			var subs = db.Subscriptions.Where(sub => sub.ProviderID == provider.ID);
+			ViewBag.Subscriptions = subs;
             return View(provider);
         }
 
