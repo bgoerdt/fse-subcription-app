@@ -187,6 +187,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MySubscriptionController.cs" />
     <Compile Include="Controllers\ProviderController.cs" />
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\Content.cs" />
+    <Compile Include="Models\FSE_Subscription_AppContext.cs" />
     <Compile Include="Models\Provider.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -327,6 +329,11 @@
     <Content Include="Views\Subscription\Delete.cshtml" />
     <Content Include="Views\Content\Audio.cshtml" />
     <Content Include="Views\Subscription\Subscribe.cshtml" />
+    <Content Include="Views\MySubscription\Index.cshtml" />
+    <Content Include="Views\MySubscription\Details.cshtml" />
+    <Content Include="Views\MySubscription\Create.cshtml" />
+    <Content Include="Views\MySubscription\Edit.cshtml" />
+    <Content Include="Views\MySubscription\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

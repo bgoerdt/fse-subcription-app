@@ -26,6 +26,7 @@ namespace FSE_Subscription_App.Controllers
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
+
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
             return View(subscriptions.ToList());
         }
