@@ -16,6 +16,12 @@
     </section>
 }
 
+@if (User.Identity.IsAuthenticated)
+{
+	<input id="search" type="text" placeholder="Search" />
+	<span><button id="searchbutton">Go</button></span>
+}
+
 @if (User.Identity.IsAuthenticated && User.IsInRole("ContentManager"))
 {
     <h2>Here is a list of things to do as a Content Manager</h2>
@@ -51,4 +57,28 @@ if(User.Identity.IsAuthenticated)
     <h3> Checkout a list of my Subscriptions @Html.ActionLink("Here", "Index", "MySubscription")</h3>
 }
 }
+}
+
+@section Scripts
+{
+	<script type="text/javascript" src="scripts/jquery-1.4.1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$('#search').change(function () {
+				search();
+			});
+
+			$('#searchbutton').click(function () {
+				search();
+			});
+
+			function search() {
+				var query = $('#search').val();
+				var link = "@Url.Action("Search", "Search",new { query = "-1" })";
+				link = link.replace("-1", query);
+				window.location.href = link;
+			}
+		});
+	</script>
 }

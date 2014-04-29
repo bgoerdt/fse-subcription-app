@@ -1,0 +1,153 @@
+﻿@model FSE_Subscription_App.Models.SubHubSearch
+@using FSE_Subscription_App.Models
+
+@{
+    ViewBag.Title = "Search";
+	ICollection<UserSubscription> UserSubscriptions = ViewBag.UserSubscriptions;
+}
+
+<input id="search" type="text" placeholder="Search" />
+<span><button id="searchbutton">Go</button></span>
+
+<h2>Results: Subscriptions</h2>
+
+@if (Model.SubscriptionResults.Count == 0)
+{
+	@: No results found
+}
+else
+{
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Provider
+        </th>
+		<th>
+			Duration
+		</th>
+		<th>
+			Price
+		</th>
+        <th></th>
+		<th></th>
+    </tr>
+
+@foreach (var item in Model.SubscriptionResults) {
+    <tr>
+        <td>
+           @Html.ActionLink(item.SubscriptionName, "Details", new { id=item.ID })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider.CompanyName)
+        </td>
+		<td>
+			@item.GetDuration()
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Price)
+		</td>
+		<td>
+			@if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 0))
+			{
+				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=item.ID })'" />
+			}
+            else if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 1))
+		   {
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.ID })	'" />
+		   }
+		</td>
+        <td>
+            @if(User.IsInRole("ContentManager") && ViewBag.ProviderID == item.ProviderID)
+			{
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			}
+              @if(User.IsInRole("Admin"))
+			{
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+}
+
+<h2>Results: Providers</h2>
+@if (Model.ProviderResults.Count == 0)
+{
+	@: No results found
+}
+else
+{
+<table>
+    <tr>
+        <th>
+            Company
+        </th>
+        <th>
+            Website
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.ProviderResults) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyName)
+        </td>
+        <td>
+            <a href="@item.SiteLink" target="_blank">@Html.DisplayFor(modelItem => item.SiteLink)</a>
+        </td>
+        <td>
+			@Html.ActionLink("Details", "Details", new { id=item.ID })
+			@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == item.ID)
+			{
+				@: |
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID })
+			}
+            @if(User.IsInRole("Admin"))
+			{
+				@: |
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+}
+
+@section Scripts
+{
+	<script type="text/javascript" src="scripts/jquery-1.4.1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$('#search').change(function () {
+				search();
+			});
+
+			$('#searchbutton').click(function () {
+				search();
+			});
+
+			function search() {
+				var query = $('#search').val();
+				var link = "@Url.Action("Search", "Search",new { query = "-1" })";
+				link = link.replace("-1", query);
+				window.location.href = link;
+			}
+		});
+	</script>
+}

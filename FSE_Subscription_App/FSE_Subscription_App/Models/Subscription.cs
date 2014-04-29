@@ -8,7 +8,7 @@ using System.Web;
 
 namespace FSE_Subscription_App.Models
 {
-	public class Subscription
+	public class Subscription : IComparable<Subscription>
 	{
 		public int ID { get; set; }
 		[Required]
@@ -44,5 +44,19 @@ namespace FSE_Subscription_App.Models
 			else
 				return new TimeSpan(0);
 		}
+
+		#region IComparable<Subscription> Members
+
+		public int CompareTo(Subscription other)
+		{
+			if (this.ID < other.ID)
+				return -1;
+			else if (this.ID == other.ID)
+				return 0;
+			else
+				return 1;
+		}
+
+		#endregion
 	}
 }
