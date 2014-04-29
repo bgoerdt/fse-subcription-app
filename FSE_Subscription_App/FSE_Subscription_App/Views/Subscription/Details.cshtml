@@ -40,6 +40,17 @@
         @Html.DisplayFor(model => model.Price)
     </div>
 
+	@if (!User.IsInRole("ContentManager") && !User.IsInRole("Admin"))
+	{
+		<div class="display-label">
+			<strong>Expiration</strong>
+		</div>
+		<div class="display-field">
+			@ViewBag.Expiration
+		</div>
+		<input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=Model.ID })	'" />
+	}
+
 	<h2>Contents</h2>
 
 	<table>
