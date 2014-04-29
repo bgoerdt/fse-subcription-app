@@ -9,7 +9,7 @@
 @Html.DisplayFor(model => model.Provider.CompanyName)<br /><br />
 
 @Video.MediaPlayer(
-    path: "/Uploaded_Content/MyCompany/Wildlife.wmv",
+    path: @Model.ServerPath,
 	width: "600",
     height: "400",
     autoStart: true,
@@ -20,6 +20,7 @@
     volume: 75)
 
 <br /><br />
+@Html.DisplayFor(model => model.Description)<br /><br />
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

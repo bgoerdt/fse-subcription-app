@@ -39,11 +39,14 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
-			if (User.IsInRole("ContentManager"))
+			if (User.IsInRole("Admin") || User.IsInRole("ContentManager"))
 			{
-				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 				var contentList = db.Content.Where(c => c.ProviderID == provider.ID).ToList();
 				ViewBag.ContentList = contentList;
+				if (User.IsInRole("ContentManager"))
+				{
+					ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+				}
 			}
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 			ViewBag.UserSubscriptions = user.UserSubscriptions;
@@ -82,7 +85,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Edit/5
-		[Authorize(Roles = "ContentManager")]
+		[Authorize(Roles = "ContentManager, Admin")]
         public ActionResult Edit(int id = 0)
         {
             Provider provider = db.Providers.Find(id);
@@ -98,7 +101,7 @@ namespace FSE_Subscription_App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-		[Authorize(Roles = "ContentManager")]
+		[Authorize(Roles = "ContentManager, Admin")]
         public ActionResult Edit(Provider provider)
         {
             if (ModelState.IsValid)
@@ -112,7 +115,7 @@ namespace FSE_Subscription_App.Controllers
 
         //
         // GET: /Provider/Delete/5
-		[Authorize(Roles = "ContentManager")]
+		[Authorize(Roles = "ContentManager, Admin")]
         public ActionResult Delete(int id = 0)
         {
             Provider provider = db.Providers.Find(id);

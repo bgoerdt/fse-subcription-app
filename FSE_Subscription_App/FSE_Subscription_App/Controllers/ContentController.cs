@@ -19,13 +19,14 @@ namespace FSE_Subscription_App.Controllers
         // GET: /Content/
         public ActionResult Index()
         {
-			/*Content videoTest = new Content();
-			videoTest.ContentType = "video/wmv";
-			videoTest.Description = "video test";
-			videoTest.Name = "video test - wmv";
-			videoTest.ProviderID = 1;
-			videoTest.ServerPath = "\\Uploaded_Content\\MyCompany\\Wildlife.wmv";
-			db.Content.Add(videoTest);
+			/*Content video1 = new Content();
+			video1.ContentType = "video/wmv";
+			video1.Description = "I <3 aminals";
+			video1.Name = "Wildlife";
+			video1.Type = "Video";
+			video1.ProviderID = 4;
+			video1.ServerPath = "/Uploaded_Content/Cute Animals/Wildlife.wmv";
+			db.Content.Add(video1);
 			db.SaveChanges();*/
 
 			var content = db.Content.Include(c => c.Provider);
