@@ -1,0 +1,51 @@
+﻿@model FSE_Subscription_App.Models.Subscription
+
+@{
+    ViewBag.Title = "Unsubscribe";
+}
+
+<h2>Unsubscribe</h2>
+
+<h3>Are you sure you want to unsubscribe from this?</h3><br />
+<fieldset>
+    <legend>Subscription</legend>
+	<div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.Provider.CompanyName)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Provider.CompanyName)
+    </div>
+    <div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.SubscriptionName)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SubscriptionName)
+    </div>
+
+    <div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.Description)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+	<div class="display-label">
+         <strong>Duration</strong>
+    </div>
+    <div class="display-field">
+        @Model.GetDuration()
+    </div>
+	<div class="display-label">
+         <strong>@Html.DisplayNameFor(model => model.Price)</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Confirm Unsubscription" /><br /><br />
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

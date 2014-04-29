@@ -26,7 +26,10 @@ namespace FSE_Subscription_App.Controllers
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.UserSubscriptions = user.UserSubscriptions;
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
+			ViewBag.Warning = TempData["Warning"];
             return View(subscriptions.ToList());
         }
 
@@ -36,10 +39,24 @@ namespace FSE_Subscription_App.Controllers
         public ActionResult Details(int id = 0)
         {
             Subscription subscription = db.Subscriptions.Find(id);
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
             if (subscription == null)
             {
                 return HttpNotFound();
             }
+			if (user.UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 0)
+			{
+				TempData.Add("Warning", "Please subscribe to see content");
+				return RedirectToAction("Index");
+			}
+			var user_sub = user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID);
+			if (DateTime.Now > user_sub.Expiration)
+			{
+				user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
+				db.SaveChanges();
+				TempData.Add("Warning", "This subscription has expired and has been removed from your subscriptions");
+				return RedirectToAction("Index");
+			}
 			if (User.IsInRole("ContentManager"))
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
@@ -79,6 +96,7 @@ namespace FSE_Subscription_App.Controllers
 					subscription.Contents.Add(content);
 					content.Subscriptions.Add(subscription);
 				}
+
 				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 				subscription.ProviderID = user.Provider.ID;
 				subscription.Provider = user.Provider;
@@ -108,17 +126,50 @@ namespace FSE_Subscription_App.Controllers
 		public ActionResult Subscribe(Subscription sub)
 		{
 			Subscription subscription = db.Subscriptions.Find(sub.ID);
-			if (ModelState.IsValid)
+			if (subscription != null)
 			{
 				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 				if (user == null)
 				{
 					return HttpNotFound();
 				}
-				
-				user.Subscriptions.Add(subscription);
+
+				DateTime expiration = DateTime.Now + subscription.GetDuration();
+				user.UserSubscriptions.Add(new UserSubscription(user.UserId, subscription.ID, expiration));
 				db.SaveChanges();
-				return RedirectToAction("Manage", "Account");
+				return RedirectToAction("Index", "MySubscription");
+			}
+			return View(subscription);
+		}
+
+		// GET
+		public ActionResult Unsubscribe(int id = 0)
+		{
+			Subscription subscription = db.Subscriptions.Find(id);
+			if (subscription == null)
+			{
+				return HttpNotFound();
+			}
+			return View(subscription);
+		}
+
+		// POST
+		[HttpPost]
+		public ActionResult Unsubscribe(Subscription sub)
+		{
+			Subscription subscription = db.Subscriptions.Find(sub.ID);
+			if (subscription != null)
+			{
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				if (user == null)
+				{
+					return HttpNotFound();
+				}
+
+				user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
+				db.SaveChanges();
+				TempData.Add("Warning", "You have been unsubscribed");
+                return RedirectToAction("Index", "MySubscription");
 			}
 			return View(subscription);
 		}
@@ -133,6 +184,8 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.Provider = user.Provider.CompanyName;
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", subscription.ProviderID);
             return View(subscription);
         }
@@ -147,6 +200,9 @@ namespace FSE_Subscription_App.Controllers
         {
             if (ModelState.IsValid)
             {
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				subscription.ProviderID = user.Provider.ID;
+				subscription.Provider = user.Provider;
                 db.Entry(subscription).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

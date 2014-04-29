@@ -1,7 +1,9 @@
 ﻿@model FSE_Subscription_App.Models.Provider
+@using FSE_Subscription_App.Models;
 
 @{
     ViewBag.Title = "Details";
+	ICollection<UserSubscription> UserSubscriptions = ViewBag.UserSubscriptions;
 }
 
 <h2>Details</h2>
@@ -34,6 +36,12 @@
         <th>
             Description
         </th>
+		<th>
+			Duration
+		</th>
+		<th>
+			Price
+		</th>
         <th></th>
 		<th></th>
     </tr>
@@ -47,10 +55,20 @@
             @Html.DisplayFor(modelItem => subscription.Description)
         </td>
 		<td>
-			@if(!User.IsInRole("ContentManager"))
+			@Html.DisplayFor(modelItem => subscription.GetDuration())
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => subscription.Price)
+		</td>
+		<td>
+			@if(!User.IsInRole("ContentManager") && (UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 0))
 			{
-				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })'" />
+				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })	'" />
 			}
+		   else if (!User.IsInRole("ContentManager") && (UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 1))
+		   {
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=subscription.ID })	'" />
+		   }
 	   </td>
         <td>
 			@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == subscription.ProviderID)

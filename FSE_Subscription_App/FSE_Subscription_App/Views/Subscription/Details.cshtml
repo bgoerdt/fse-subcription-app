@@ -9,25 +9,35 @@
 <fieldset>
     <legend>Subscription</legend>
 
+	<div class="display-label">
+         <strong>@Html.DisplayNameFor(model => model.Provider.CompanyName)</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Provider.CompanyName)
+    </div>
     <div class="display-label">
          <strong>@Html.DisplayNameFor(model => model.SubscriptionName)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.SubscriptionName)
     </div>
-
     <div class="display-label">
          <strong>@Html.DisplayNameFor(model => model.Description)</strong>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
-
-    <div class="display-label">
-         <strong>@Html.DisplayNameFor(model => model.Provider.CompanyName)</strong>
+	<div class="display-label">
+         <strong>Duration</strong>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Provider.CompanyName)
+        @Model.GetDuration()
+    </div>
+	<div class="display-label">
+         <strong>@Html.DisplayNameFor(model => model.Price)</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
     </div>
 
 	<h2>Contents</h2>

@@ -8,16 +8,6 @@ using System.Web.Security;
 
 namespace FSE_Subscription_App.Models
 {
-	/*public class UsersContext : DbContext
-	{
-		public UsersContext()
-			: base("DefaultConnection")
-		{
-		}
-
-		public DbSet<UserProfile> UserProfiles { get; set; }
-	}*/
-
 	[Table("UserProfile")]
 	public class UserProfile
 	{
@@ -28,7 +18,30 @@ namespace FSE_Subscription_App.Models
 		public bool ContentManager { get; set; }
 
 		public virtual Provider Provider { get; set; }
-		public virtual ICollection<Subscription> Subscriptions { get; set; }
+		public virtual ICollection<UserSubscription> UserSubscriptions { get; set; }
+	}
+
+	public class UserSubscription
+	{
+		public UserSubscription() { }
+		public UserSubscription(int userId, int subId, DateTime exp)
+		{
+			UserID = userId;
+			SubscriptionID = subId;
+			Expiration = exp;
+		}
+
+		[Key]
+		[Column(Order = 1)]
+		public int UserID { get; set; }
+		public UserProfile User { get; set; }
+
+		[Key]
+		[Column(Order = 0)]
+		public int SubscriptionID { get; set; }
+		public virtual Subscription Subscription { get; set; }
+
+		public DateTime Expiration { get; set; }
 	}
 
 	public class RegisterExternalLoginModel

@@ -4,6 +4,10 @@
     ViewBag.Title = "Create";
 }
 
+@{
+    string[] options = { "Minute(s)", "Week(s)", "Year(s)" };
+}
+
 <h2>Create</h2>
 
 @using (Html.BeginForm("Create", "Subscription", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -14,6 +18,10 @@
     <fieldset>
         <legend>Subscription</legend>
 
+		<div class="editor-label">
+            @Html.LabelFor(model => model.ProviderID, "Provider")
+			@ViewBag.Provider
+        </div>
         <div class="editor-label">
             <b>@Html.LabelFor(model => model.SubscriptionName)</b>
         </div>
@@ -21,7 +29,6 @@
             @Html.EditorFor(model => model.SubscriptionName)
             @Html.ValidationMessageFor(model => model.SubscriptionName)
         </div>
-
         <div class="editor-label">
             <b>@Html.LabelFor(model => model.Description)</b>
         </div>
@@ -29,13 +36,19 @@
             @Html.EditorFor(model => model.Description)
             @Html.ValidationMessageFor(model => model.Description)
         </div>
-
-        <div class="editor-label">
-            <b>@Html.LabelFor(model => model.ProviderID, "Provider")</b>
-        </div>
-        <div class="editor-field">
-            @ViewBag.Provider
-            @Html.ValidationMessageFor(model => model.ProviderID)
+		<div class="editor-label">
+			<b>Duration</b>
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.TimeCount) @Html.DropDownListFor(model => model.TimeUnits, new SelectList(@options))
+			@Html.ValidationMessageFor(model => model.TimeCount) @Html.ValidationMessageFor(model => model.TimeUnits)
+		</div>
+		<div class="editor-label">
+			<b>@Html.LabelFor(model => model.Price)</b>
+		</div>
+		<div class="editor-field">
+            @Html.EditorFor(model => model.Price)
+            @Html.ValidationMessageFor(model => model.Price)
         </div>
 
 		<div class="editor-label">

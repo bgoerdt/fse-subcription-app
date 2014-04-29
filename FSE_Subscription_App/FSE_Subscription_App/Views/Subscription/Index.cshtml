@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<FSE_Subscription_App.Models.Subscription>
+@using FSE_Subscription_App.Models;
 
 @{
 	ViewBag.Title = "All Subscriptions";
+	ICollection<UserSubscription> UserSubscriptions = ViewBag.UserSubscriptions;
 }
 
 <h2>All Subscriptions</h2>
@@ -23,6 +25,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Provider.CompanyName)
         </th>
+		<th>
+			Duration
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Price)
+		</th>
         <th></th>
 		<th></th>
     </tr>
@@ -39,13 +47,28 @@
             @Html.DisplayFor(modelItem => item.Provider.CompanyName)
         </td>
 		<td>
-			@if(!User.IsInRole("ContentManager"))
+			@item.GetDuration()
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Price)
+		</td>
+		<td>
+			@if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 0))
 			{
 				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=item.ID })'" />
 			}
+            else if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 1))
+		   {
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.ID })	'" />
+		   }
 		</td>
         <td>
             @if(User.IsInRole("ContentManager") && ViewBag.ProviderID == item.ProviderID)
+			{
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			}
+              @if(User.IsInRole("Admin"))
 			{
 				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
 				@Html.ActionLink("Delete", "Delete", new { id=item.ID })

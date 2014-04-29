@@ -31,6 +31,9 @@
         <div id="body">
             @RenderSection("featured", required: false)
             <section class="content-wrapper main-content clear-fix">
+				<div style="color:red">
+					<h3>@ViewBag.Warning</h3>
+				</div>
                 @RenderBody()
             </section>
         </div>

@@ -14,6 +14,7 @@ namespace FSE_Subscription_App.Models
 		public DbSet<Content> Content { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
 		public DbSet<UserProfile> UserProfiles { get; set; }
+		public DbSet<UserSubscription> UserSubscriptions { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
