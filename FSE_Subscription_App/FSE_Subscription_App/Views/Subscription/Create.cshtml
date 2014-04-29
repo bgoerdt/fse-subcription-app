@@ -37,7 +37,7 @@
             @Html.ValidationMessageFor(model => model.Description)
         </div>
 		<div class="editor-label">
-			<b>@Html.LabelFor(model => model.GetDuration())</b>
+			<b>Duration</b>
 		</div>
 		<div class="editor-field">
 			@Html.EditorFor(model => model.TimeCount) @Html.DropDownListFor(model => model.TimeUnits, new SelectList(@options))

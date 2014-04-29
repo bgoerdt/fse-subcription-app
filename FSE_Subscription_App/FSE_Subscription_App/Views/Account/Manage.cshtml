@@ -7,7 +7,7 @@
 {
 	<p>You are a Content Manager for <strong>@ViewBag.Provider</strong></p>
 }
-else if(ViewBag.Subscriptions.Count == 0)
+else if(ViewBag.UserSubscriptions.Count == 0)
 {
 	<h2>My Subscriptions</h2>
 	<h3>You are not subscribed to any content.</h3>
@@ -51,7 +51,7 @@ else
 				@Html.DisplayFor(modelItem => user_subscription.Subscription.Provider.CompanyName)
 			</td>
 			<td>
-				@Html.DisplayFor(modelItem => user_subscription.Subscription.GetDuration())
+				@user_subscription.Subscription.GetDuration()
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => user_subscription.Subscription.Price)
