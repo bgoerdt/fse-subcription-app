@@ -127,7 +127,7 @@ namespace FSE_Subscription_App.Controllers
 
 				user.Subscriptions.Add(subscription);
 				db.SaveChanges();
-				return RedirectToAction("Manage", "Account");
+				return RedirectToAction("Index", "MySubscription");
 			}
 			return View(subscription);
 		}
@@ -159,7 +159,7 @@ namespace FSE_Subscription_App.Controllers
 				user.Subscriptions.Remove(subscription);
 				db.SaveChanges();
 				TempData.Add("Warning", "You have been unsubscribed");
-				return RedirectToAction("Index");
+                return RedirectToAction("Index", "MySubscription");
 			}
 			return View(subscription);
 		}

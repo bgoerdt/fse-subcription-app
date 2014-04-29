@@ -24,7 +24,8 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-           @Html.ActionLink(item.SubscriptionName, "Details", new { id=item.ID })
+            @Html.ActionLink(item.SubscriptionName, "Details", "Subscription", new { id=item.ID}, new {})
+           
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -32,7 +33,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.Provider.CompanyName)
         </td>
-	
+	<td>
+		
+
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.ID })	'" />
+		  
+		</td>
     </tr>
 }
 
