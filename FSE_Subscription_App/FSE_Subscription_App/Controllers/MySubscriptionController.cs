@@ -22,9 +22,9 @@ namespace FSE_Subscription_App.Controllers
 
         public ActionResult Index()
         {
-            var subscriptions = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Subscriptions;
+            var userSubscriptions = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).UserSubscriptions;
           
-            return View(subscriptions.ToList());
+            return View(userSubscriptions.ToList());
         }
 
         ////

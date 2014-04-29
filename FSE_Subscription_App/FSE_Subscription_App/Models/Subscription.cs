@@ -20,6 +20,29 @@ namespace FSE_Subscription_App.Models
 		public int ProviderID { get; set; }
 		public virtual Provider Provider { get; set; }
 
+		[Required]
+		[DataType(DataType.Currency)]
+		[DisplayFormat(DataFormatString = "{0:c}")]
+		public double Price { get; set; }
+
+		[Required]
+		public int TimeCount { get; set; }
+
+		[Required]
+		public string TimeUnits { get; set; }
+
 		public virtual ICollection<Content> Contents { get; set; }
+
+		public TimeSpan GetDuration()
+		{
+			if (TimeUnits.Equals("Minute(s)"))
+				return new TimeSpan(0, TimeCount, 0);
+			else if (TimeUnits.Equals("Week(s)"))
+				return new TimeSpan(TimeCount * 7, 0, 0, 0);
+			else if (TimeUnits.Equals("Year(s)"))
+				return new TimeSpan(TimeCount * 365, 0, 0, 0);
+			else
+				return new TimeSpan(0);
+		}
 	}
 }

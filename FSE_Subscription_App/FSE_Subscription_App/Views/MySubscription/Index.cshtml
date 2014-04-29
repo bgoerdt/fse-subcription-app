@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FSE_Subscription_App.Models.Subscription>
+﻿@model IEnumerable<FSE_Subscription_App.Models.UserSubscription>
 
 @{
 	ViewBag.Title = "My Subscriptions";
@@ -9,13 +9,13 @@
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SubscriptionName)
+            @Html.DisplayNameFor(model => model.Subscription.SubscriptionName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Subscription.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Provider.CompanyName)
+            @Html.DisplayNameFor(model => model.Subscription.Provider.CompanyName)
         </th>
         <th></th>
 		<th></th>
@@ -24,19 +24,19 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.ActionLink(item.SubscriptionName, "Details", "Subscription", new { id=item.ID}, new {})
+            @Html.ActionLink(item.Subscription.SubscriptionName, "Details", "Subscription", new { id=item.Subscription.ID}, new {})
            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            @Html.DisplayFor(modelItem => item.Subscription.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Provider.CompanyName)
+            @Html.DisplayFor(modelItem => item.Subscription.Provider.CompanyName)
         </td>
 	<td>
 		
 
-			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.ID })	'" />
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.Subscription.ID })	'" />
 		  
 		</td>
     </tr>

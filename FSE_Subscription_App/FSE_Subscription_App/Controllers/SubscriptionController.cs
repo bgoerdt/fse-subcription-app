@@ -27,7 +27,7 @@ namespace FSE_Subscription_App.Controllers
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
-			ViewBag.UserSubscriptions = user.Subscriptions;
+			ViewBag.UserSubscriptions = user.UserSubscriptions;
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
 			ViewBag.Warning = TempData["Warning"];
             return View(subscriptions.ToList());
@@ -40,7 +40,7 @@ namespace FSE_Subscription_App.Controllers
         {
             Subscription subscription = db.Subscriptions.Find(id);
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
-			if (!user.Subscriptions.Contains(subscription))
+			if (user.UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 0)
 			{
 				TempData.Add("Warning", "Please subscribe to see content");
 				return RedirectToAction("Index");
@@ -88,6 +88,7 @@ namespace FSE_Subscription_App.Controllers
 					subscription.Contents.Add(content);
 					content.Subscriptions.Add(subscription);
 				}
+
 				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 				subscription.ProviderID = user.Provider.ID;
 				subscription.Provider = user.Provider;
@@ -125,7 +126,8 @@ namespace FSE_Subscription_App.Controllers
 					return HttpNotFound();
 				}
 
-				user.Subscriptions.Add(subscription);
+				DateTime expiration = DateTime.Now + subscription.GetDuration();
+				user.UserSubscriptions.Add(new UserSubscription(user.UserId, subscription.ID, expiration));
 				db.SaveChanges();
 				return RedirectToAction("Index", "MySubscription");
 			}
@@ -156,7 +158,7 @@ namespace FSE_Subscription_App.Controllers
 					return HttpNotFound();
 				}
 
-				user.Subscriptions.Remove(subscription);
+				user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
 				db.SaveChanges();
 				TempData.Add("Warning", "You have been unsubscribed");
                 return RedirectToAction("Index", "MySubscription");

@@ -176,7 +176,7 @@ namespace FSE_Subscription_App.Controllers
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 			if(user.Provider != null)
 				ViewBag.Provider = user.Provider.CompanyName;
-			ViewBag.Subscriptions = user.Subscriptions;
+			ViewBag.UserSubscriptions = user.UserSubscriptions;
 
 			ViewBag.StatusMessage =
 				message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
