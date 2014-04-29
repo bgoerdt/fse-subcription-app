@@ -42,6 +42,8 @@ namespace FSE_Subscription_App.Controllers
 			if (User.IsInRole("ContentManager"))
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
+				var contentList = db.Content.Where(c => c.ProviderID == provider.ID).ToList();
+				ViewBag.ContentList = contentList;
 			}
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 			ViewBag.UserSubscriptions = user.UserSubscriptions;

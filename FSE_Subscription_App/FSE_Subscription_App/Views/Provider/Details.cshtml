@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Details";
 	ICollection<UserSubscription> UserSubscriptions = ViewBag.UserSubscriptions;
+	ICollection<Content> ContentList = ViewBag.ContentList;
 }
 
 <h2>Details</h2>
@@ -55,7 +56,7 @@
             @Html.DisplayFor(modelItem => subscription.Description)
         </td>
 		<td>
-			@Html.DisplayFor(modelItem => subscription.GetDuration())
+			@subscription.GetDuration()
 		</td>
 		<td>
 			@Html.DisplayFor(modelItem => subscription.Price)
@@ -79,13 +80,74 @@
 		</td>
     </tr>
 }
-
 </table>
 
+@if ((User.IsInRole("ContentManager") && ViewBag.ProviderID == Model.ID) || User.IsInRole("Admin"))
+{
+<h2>Content</h2>
+<table>
+    <tr>
+		<th>
+            File
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+			Description
+        </th>
+        <th>
+            Company
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in ContentList)
+{
+    <tr>
+		<td>
+			@if (item.ContentType == "audio/mp3")
+   {
+				@Html.ActionLink(item.Name, "Audio", "Content", new { id = item.ID }, new object { })
+   }
+   else if (item.ContentType == "video/wmv")
+   {
+				@Html.ActionLink(item.Name, "Video", "Content", new { id = item.ID }, new object { })
+   }
+   else
+   {
+				@Html.ActionLink(item.Name, "ViewContent", "Content", new { id = item.ID }, new object { })
+   }
+		</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider.CompanyName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+        </td>
+    </tr>
+}
+</table>
+}
+
 <p>
-	@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == Model.ID)
-	{
-		@Html.ActionLink("Edit", "Edit", new { id=Model.ID }) @: |
+	@if (User.IsInRole("ContentManager") && ViewBag.ProviderID == Model.ID)
+ {
+		@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) @: |
 	}
     @Html.ActionLink("Back to List", "Index")
 </p>
