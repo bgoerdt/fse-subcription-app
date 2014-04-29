@@ -26,8 +26,12 @@ namespace FSE_Subscription_App.Controllers
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
+<<<<<<< HEAD
+
+=======
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
-			ViewBag.UserSubscriptions = user.UserSubscriptions;
+			ViewBag.UserSubscriptions = user.Subscriptions;
+>>>>>>> 65afb4b9e3d761a47125d2c3b295fd08804c52a9
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
 			ViewBag.Warning = TempData["Warning"];
             return View(subscriptions.ToList());
@@ -40,31 +44,18 @@ namespace FSE_Subscription_App.Controllers
         {
             Subscription subscription = db.Subscriptions.Find(id);
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			if (!user.Subscriptions.Contains(subscription))
+			{
+				TempData.Add("Warning", "Please subscribe to see content");
+				return RedirectToAction("Index");
+			}
             if (subscription == null)
             {
                 return HttpNotFound();
             }
-
 			if (User.IsInRole("ContentManager"))
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
-			}
-			else if(!User.IsInRole("Admin"))
-			{
-				if (user.UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 0)
-				{
-					TempData.Add("Warning", "Please subscribe to see content");
-					return RedirectToAction("Index");
-				}
-				var user_sub = user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID);
-				if (DateTime.Now > user_sub.Expiration)
-				{
-					user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
-					db.SaveChanges();
-					TempData.Add("Warning", "This subscription has expired and has been removed from your subscriptions");
-					return RedirectToAction("Index");
-				}
-				ViewBag.Expiration = user_sub.Expiration;
 			}
             return View(subscription);
         }
@@ -101,7 +92,6 @@ namespace FSE_Subscription_App.Controllers
 					subscription.Contents.Add(content);
 					content.Subscriptions.Add(subscription);
 				}
-
 				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 				subscription.ProviderID = user.Provider.ID;
 				subscription.Provider = user.Provider;
@@ -139,10 +129,9 @@ namespace FSE_Subscription_App.Controllers
 					return HttpNotFound();
 				}
 
-				DateTime expiration = DateTime.Now + subscription.GetDuration();
-				user.UserSubscriptions.Add(new UserSubscription(user.UserId, subscription.ID, expiration));
+				user.Subscriptions.Add(subscription);
 				db.SaveChanges();
-				return RedirectToAction("Index", "MySubscription");
+				return RedirectToAction("Manage", "Account");
 			}
 			return View(subscription);
 		}
@@ -171,10 +160,10 @@ namespace FSE_Subscription_App.Controllers
 					return HttpNotFound();
 				}
 
-				user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
+				user.Subscriptions.Remove(subscription);
 				db.SaveChanges();
 				TempData.Add("Warning", "You have been unsubscribed");
-                return RedirectToAction("Index", "MySubscription");
+				return RedirectToAction("Index");
 			}
 			return View(subscription);
 		}

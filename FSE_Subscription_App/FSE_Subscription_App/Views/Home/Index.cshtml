@@ -16,10 +16,38 @@
     </section>
 }
 
+@if (User.Identity.IsAuthenticated && User.IsInRole("ContentManager"))
+{
+    <h2>Here is a list of things to do as a Content Manager</h2>
+    <h3>Checkout a list of our Content Providers @Html.ActionLink("Here", "Index", "Provider")</h3>
+    <h3> Checkout a list of our Subscriptions @Html.ActionLink("Here", "Index", "Subscription")</h3>
+    <h3>Link to @Html.ActionLink("My Provider Page", "Details", "Provider", new { id=ViewBag.ProviderID}, new {})</h3>
+    <h3>Create a new subscription @Html.ActionLink("Here", "Create", "Subscription")</h3>
+}
+else
+{
+        if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+              <h2>Welcome Admin</h2>
+              <h3>with great power comes great responsibility</h3>
+             <h2>Here is a list of things to do as a Admin</h2>
+            <h3>Checkout a list of our Content Providers and edit them if you want @Html.ActionLink("Here", "Index", "Provider")</h3>
+          <h3> Checkout a list of our Subscriptions and edit them if you want @Html.ActionLink("Here", "Index", "Subscription")</h3>
+    
+
+        }
+else
+{
+    
+    <h2>Here is a list of things to do</h2>
 <h3>For testing only: @Html.ActionLink("Content", "Index", "Content")</h3>
 
-<h3>@Html.ActionLink("Providers", "Index", "Provider")</h3>
-@if(User.Identity.IsAuthenticated)
+<h3>Checkout a list of our Content Providers @Html.ActionLink("Here", "Index", "Provider")</h3>
+if(User.Identity.IsAuthenticated)
 {
-	<h3>@Html.ActionLink("Subscriptions", "Index", "Subscription")</h3>
+	
+    <h3> Checkout a list of our Subscriptions @Html.ActionLink("Here", "Index", "Subscription")</h3>
+    <h3> Checkout a list of my Subscriptions @Html.ActionLink("Here", "Index", "MySubscription")</h3>
+}
+}
 }

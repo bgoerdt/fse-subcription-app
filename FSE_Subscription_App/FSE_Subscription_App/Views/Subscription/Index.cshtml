@@ -53,17 +53,22 @@
 			@Html.DisplayFor(modelItem => item.Price)
 		</td>
 		<td>
-			@if (!User.IsInRole("ContentManager") && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 0))
+			@if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 0))
 			{
 				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=item.ID })'" />
 			}
-		   else if (!User.IsInRole("ContentManager") && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 1))
+            else if ((!User.IsInRole("ContentManager") && !User.IsInRole("Admin")) && (UserSubscriptions.Count(usub => usub.SubscriptionID == item.ID) == 1))
 		   {
 			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=item.ID })	'" />
 		   }
 		</td>
         <td>
             @if(User.IsInRole("ContentManager") && ViewBag.ProviderID == item.ProviderID)
+			{
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			}
+              @if(User.IsInRole("Admin"))
 			{
 				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) @: |
 				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
