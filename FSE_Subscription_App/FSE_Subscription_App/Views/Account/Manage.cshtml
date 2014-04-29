@@ -26,23 +26,41 @@ else
 			<th>
 				Company Name
 			</th>
+			<th>
+				Duration
+			</th>
+			<th>
+				Price
+			</th>
+			<th>
+				Expiration
+			</th>
 			<th></th>
 		</tr>
 
-	@foreach (FSE_Subscription_App.Models.Subscription subscription in ViewBag.Subscriptions)
+	@foreach (FSE_Subscription_App.Models.UserSubscription user_subscription in ViewBag.UserSubscriptions)
 	{
 	    <tr>
 			<td>
-			   @Html.ActionLink(subscription.SubscriptionName, "Details", "Subscription", new { id = subscription.ID }, new { })
+			   @Html.ActionLink(user_subscription.Subscription.SubscriptionName, "Details", "Subscription", new { id = user_subscription.Subscription.ID }, new { })
 			</td>
 			<td>
-				@Html.DisplayFor(modelItem => subscription.Description)
+				@Html.DisplayFor(modelItem => user_subscription.Subscription.Description)
 			</td>
 			<td>
-				@Html.DisplayFor(modelItem => subscription.Provider.CompanyName)
+				@Html.DisplayFor(modelItem => user_subscription.Subscription.Provider.CompanyName)
 			</td>
 			<td>
-				<input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=subscription.ID })	'" />
+				@Html.DisplayFor(modelItem => user_subscription.Subscription.GetDuration())
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => user_subscription.Subscription.Price)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => user_subscription.Expiration)
+			</td>
+			<td>
+				<input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=user_subscription.Subscription.ID })	'" />
 			</td>
 		</tr>
 	}

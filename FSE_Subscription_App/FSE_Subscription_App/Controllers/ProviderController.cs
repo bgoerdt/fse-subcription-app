@@ -44,7 +44,7 @@ namespace FSE_Subscription_App.Controllers
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
-			ViewBag.UserSubscriptions = user.Subscriptions;
+			ViewBag.UserSubscriptions = user.UserSubscriptions;
 			var subs = db.Subscriptions.Where(sub => sub.ProviderID == provider.ID);
 			ViewBag.Subscriptions = subs;
             return View(provider);

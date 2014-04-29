@@ -10,6 +10,12 @@
 <fieldset>
     <legend>Subscription</legend>
 
+	<div class="display-label">
+         <b>@Html.DisplayNameFor(model => model.Provider.CompanyName)</b>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Provider.CompanyName)
+    </div>
     <div class="display-label">
          <b>@Html.DisplayNameFor(model => model.SubscriptionName)</b>
     </div>
@@ -23,13 +29,19 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.Description)
     </div>
-
-    <div class="display-label">
-         <b>@Html.DisplayNameFor(model => model.Provider.CompanyName)</b>
+		<div class="display-label">
+         <strong>Duration</strong>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Provider.CompanyName)
+        @Html.DisplayFor(model => model.GetDuration())
     </div>
+	<div class="display-label">
+         <strong>@Html.DisplayNameFor(model => model.Price)</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
 </fieldset>
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
