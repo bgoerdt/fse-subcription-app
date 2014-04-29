@@ -26,8 +26,10 @@ namespace FSE_Subscription_App.Controllers
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
 			}
-
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.UserSubscriptions = user.Subscriptions;
             var subscriptions = db.Subscriptions.Include(s => s.Provider);
+			ViewBag.Warning = TempData["Warning"];
             return View(subscriptions.ToList());
         }
 
@@ -37,6 +39,12 @@ namespace FSE_Subscription_App.Controllers
         public ActionResult Details(int id = 0)
         {
             Subscription subscription = db.Subscriptions.Find(id);
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			if (!user.Subscriptions.Contains(subscription))
+			{
+				TempData.Add("Warning", "Please subscribe to see content");
+				return RedirectToAction("Index");
+			}
             if (subscription == null)
             {
                 return HttpNotFound();
@@ -109,17 +117,49 @@ namespace FSE_Subscription_App.Controllers
 		public ActionResult Subscribe(Subscription sub)
 		{
 			Subscription subscription = db.Subscriptions.Find(sub.ID);
-			if (ModelState.IsValid)
+			if (subscription != null)
 			{
 				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
 				if (user == null)
 				{
 					return HttpNotFound();
 				}
-				
+
 				user.Subscriptions.Add(subscription);
 				db.SaveChanges();
 				return RedirectToAction("Manage", "Account");
+			}
+			return View(subscription);
+		}
+
+		// GET
+		public ActionResult Unsubscribe(int id = 0)
+		{
+			Subscription subscription = db.Subscriptions.Find(id);
+			if (subscription == null)
+			{
+				return HttpNotFound();
+			}
+			return View(subscription);
+		}
+
+		// POST
+		[HttpPost]
+		public ActionResult Unsubscribe(Subscription sub)
+		{
+			Subscription subscription = db.Subscriptions.Find(sub.ID);
+			if (subscription != null)
+			{
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				if (user == null)
+				{
+					return HttpNotFound();
+				}
+
+				user.Subscriptions.Remove(subscription);
+				db.SaveChanges();
+				TempData.Add("Warning", "You have been unsubscribed");
+				return RedirectToAction("Index");
 			}
 			return View(subscription);
 		}
@@ -134,6 +174,8 @@ namespace FSE_Subscription_App.Controllers
             {
                 return HttpNotFound();
             }
+			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+			ViewBag.Provider = user.Provider.CompanyName;
             ViewBag.ProviderID = new SelectList(db.Providers, "ID", "CompanyName", subscription.ProviderID);
             return View(subscription);
         }
@@ -148,6 +190,9 @@ namespace FSE_Subscription_App.Controllers
         {
             if (ModelState.IsValid)
             {
+				var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+				subscription.ProviderID = user.Provider.ID;
+				subscription.Provider = user.Provider;
                 db.Entry(subscription).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

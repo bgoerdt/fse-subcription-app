@@ -47,10 +47,14 @@
             @Html.DisplayFor(modelItem => subscription.Description)
         </td>
 		<td>
-			@if(!User.IsInRole("ContentManager"))
+			@if(!User.IsInRole("ContentManager") && !ViewBag.UserSubscriptions.Contains(subscription))
 			{
-				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })'" />
+				<input type="button" value="Subscribe" onclick="location.href='@Url.Action("Subscribe", "Subscription", new { id=subscription.ID })	'" />
 			}
+		   else if (!User.IsInRole("ContentManager") && ViewBag.UserSubscriptions.Contains(subscription))
+		   {
+			   <input type="button" value="Unsubscribe" onclick="location.href='@Url.Action("Unsubscribe", "Subscription", new { id=subscription.ID })	'" />
+		   }
 	   </td>
         <td>
 			@if(User.IsInRole("ContentManager") && ViewBag.ProviderID == subscription.ProviderID)
