@@ -40,15 +40,23 @@ namespace FSE_Subscription_App.Controllers
         {
             Subscription subscription = db.Subscriptions.Find(id);
 			var user = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name));
+            if (subscription == null)
+            {
+                return HttpNotFound();
+            }
 			if (user.UserSubscriptions.Count(usub => usub.SubscriptionID == subscription.ID) == 0)
 			{
 				TempData.Add("Warning", "Please subscribe to see content");
 				return RedirectToAction("Index");
 			}
-            if (subscription == null)
-            {
-                return HttpNotFound();
-            }
+			var user_sub = user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID);
+			if (DateTime.Now > user_sub.Expiration)
+			{
+				user.UserSubscriptions.Remove(user.UserSubscriptions.First(usub => usub.SubscriptionID == subscription.ID));
+				db.SaveChanges();
+				TempData.Add("Warning", "This subscription has expired and has been removed from your subscriptions");
+				return RedirectToAction("Index");
+			}
 			if (User.IsInRole("ContentManager"))
 			{
 				ViewBag.ProviderID = db.UserProfiles.Find(WebSecurity.GetUserId(User.Identity.Name)).Provider.ID;
